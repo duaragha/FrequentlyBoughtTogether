@@ -1,0 +1,221 @@
+.frequently-bought-together-container {
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    padding: 20px 20px 30px 20px;
+    background-color: #eaf5fa;
+}
+
+.frequently-bought-together-total span {
+    line-height: normal;
+}
+
+.frequently-bought-together-total .btn-mini {
+    border-radius: 5px !important;
+    color: black;
+    font-size: 16px;
+}
+
+.frequently-bought-together-products .product-image-container {
+    min-height: 110px;
+}
+
+.frequently-bought-together-products>div:nth-of-type(3) {
+    border: 4px solid #ffb600;
+}
+
+.total-price {
+    font-size: 25px;
+    font-weight: 700;
+}
+
+.total-savings {
+    color: red;
+    font-weight: bold;
+}
+
+.frequently-bought-together-products .product-info a,
+.product-info p {
+    line-height: normal;
+    min-height: 50px;
+}
+
+.frequently-bought-together-products>div:nth-of-type(3):before {
+    content: "RECOMMENDED";
+    position: absolute;
+    background-color: #ffb600;
+    margin-top: -13px;
+    padding: 2px 10px;
+    border-radius: 15px;
+    font-size: 11px;
+    font-weight: bold;
+    transform: translate(-50%, -50%);
+}
+
+.savings-price {
+    background: rgb(255, 66, 68);
+    color: white;
+    font-weight: bold;
+    font-size: 13px;
+    padding: 2px 10px;
+    line-height: normal;
+    border-radius: 5px;
+}
+
+.frequently-bought-together-products {
+    display: flex;
+}
+
+.product-variant-select {
+    margin-top: 5px;
+    border-radius: 20px;
+    border: 2px solid #ccc;
+    font-size: 13px;
+    padding: 2px 5px;
+}
+
+@media screen and (max-width: 767px) {
+    .frequently-bought-together-container {
+        border-radius: 0px !important;
+        border: 0px !important;
+    }
+
+    .frequently-bought-together-products>div:nth-of-type(3):before {
+        top: 10px;
+        transform: translate(30%, -50%) !important;
+    }
+
+    .plus-sign {
+        margin-top: 0px !important;
+        text-align: center;
+    }
+
+    .frequently-bought-together-products {
+        flex-wrap: wrap !important;
+        flex-direction: column;
+    }
+
+    .frequently-bought-together-product {
+        width: 100% !important;
+        display: flex;
+        align-items: center;
+        padding: 5px;
+        margin: 0px !important;
+    }
+
+    .frequently-bought-together-product label {
+        display: flex;
+        align-items: center;
+    }
+
+    .product-info p,
+    .product-info a {
+        margin-bottom: 0px;
+    }
+
+    .frequently-bought-together-product label input {
+        align-self: flex-start;
+    }
+
+    .frequently-bought-together-product .product-info {
+        justify-content: flex-start;
+        text-align: left;
+        flex-direction: column;
+        width: 60%;
+    }
+
+    .frequently-bought-together-total {
+        padding-left: 10px;
+        text-align: center;
+        flex: auto;
+    }
+
+    .savings-price {
+        font-size: 14px;
+        padding: 2px 6px
+    }
+}
+
+@media screen and (min-width: 820px) {
+    .frequently-bought-together-total {
+        text-align: center;
+        align-self: center;
+        width: 20%;
+    }
+}
+
+.frequently-bought-together-product {
+    width: 20%;
+    margin: 10px;
+    align-items: center;
+    text-align: center;
+    box-shadow: 0 6px 6px #00000029;
+    padding: 10px;
+    border-radius: 15px;
+    position: relative;
+    background-color: white;
+}
+
+.frequently-bought-together-product.disabled {
+    opacity: 0.5;
+
+    .product-variant-select {
+        pointer-events: none;
+    }
+}
+
+.frequently-bought-together-container span.product-price {
+    font-weight: bold !important;
+}
+
+.frequently-bought-together-product input[type="checkbox"] {
+    float: left;
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    vertical-align: middle;
+    border: 1px solid #ddd;
+    appearance: none;
+    -webkit-appearance: none;
+    outline: none;
+    cursor: pointer;
+    accent-color: #5887da;
+    position: absolute;
+    left: 10px;
+    top: 10px;
+}
+
+.frequently-bought-together-product input[type="checkbox"]:checked {
+    appearance: auto;
+    clip-path: circle(50% at 50% 50%);
+    background-color: #5887da;
+}
+
+.frequently-bought-together-container .btn {
+    background: #ffb600;
+    font-weight: bold;
+    padding: 12px;
+    border-radius: 20px;
+}
+
+.frequently-bought-together-container .btn.disabled {
+    background-color: #ccc;
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.compare-at-price {
+    text-decoration: line-through;
+    font-size: 13px;
+    margin-left: 5px;
+}
+
+.plus-sign {
+    margin-top: 110px;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.total-compare-at-price {
+    /*display: none;*/
+    text-decoration: line-through;
+}

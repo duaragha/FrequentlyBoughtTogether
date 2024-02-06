@@ -1,0 +1,183 @@
+{% if product.vendor == 'Lorex' and product.available %}
+  <link rel="stylesheet" href="FBT.css">
+  {% assign fbt = product.metafields.jasper.related_products.value %}
+  {% assign collection_handle = 'listall' %}
+  {% if fbt.FrequentlyBoughtTogether %}
+    <div class="frequently-bought-together-container container container--flush">
+      <div class="section-header-title">
+        <h3 class="border-bottom-headings">Frequently Bought Together</h3>
+      </div>
+      <form action="/cart/add" method="post" enctype="multipart/form-data" id="AddToCartFBTForm">
+        <div class="frequently-bought-together-products">
+          <div class="frequently-bought-together-product">
+            <label for="{{ product.handle }}">
+              {% assign default_variant = product.first_available_variant %}
+              {% if default_variant.available %}
+                <input type="checkbox" id="{{ product.handle }}" name="id[]" value="{{ default_variant.id }}" checked>
+              {% endif %}
+              <div class="product-image-container">
+                {% if product.has_only_default_variant %}
+                  <img
+                    class="product-image"
+                    src="{{ product.featured_image | image_url: width: 150 }}"
+                    alt="{{ product.featured_image.alt }}"
+                    width="150"
+                    height="150"
+                  >
+                {% else %}
+                  <img
+                    class="product-image"
+                    src="{{ default_variant.featured_image | image_url: width: 150 }}"
+                    alt="{{ default_variant.featured_image.alt }}"
+                    width="150"
+                    height="150"
+                  >
+                {% endif %}
+              </div>
+              <div class="product-info">
+                <p class="product-title" target="_blank">{{ product.title | truncate: 50 }}</p>
+                {% assign compareAtPrice = default_variant.compare_at_price %}
+                <div>
+                  <span class="h3 product-price"
+                    ><b>{{ default_variant.price | money }}</b></span
+                  >
+                  <span class="compare-at-price">{{ compareAtPrice | money }}</span><br>
+                </div>
+                {% if product.variants.size > 1 %}
+                  <select
+                    id="product-select-{{ product.id }}"
+                    name="product-id[{{ product.id }}]"
+                    class="product-variant-select"
+                  >
+                    {% for variant in product.variants %}
+                      {% if variant.available %}
+                        <option
+                          data-price="{{ variant.price | money }}"
+                          data-compare-at-price="{{ variant.compare_at_price | money }}"
+                          data-image="{{ variant.image | image_url: width: 150 }}"
+                          data-sku="{{ variant.sku }}"
+                          value="{{ variant.id }}"
+                        >
+                          {{ variant.title }}
+                        </option>
+                      {% endif %}
+                    {% endfor %}
+                  </select>
+                {% endif %}
+              </div>
+            </label>
+          </div>
+          {% assign count = 0 %}
+          {% for relation in fbt.FrequentlyBoughtTogether %}
+            {% assign pimid = relation.id | plus: 0 %}
+            {% paginate collections[collection_handle].products by 1000 %}
+              {% for related_product in collections[collection_handle].products %}
+                {% if related_product.id == pimid %}
+                  {% unless related_product.vendor == 'Lorex Discontinued' %}
+                    {% assign count = count | plus: 1 %}
+                    <div class="plus-sign"><span>+</span></div>
+                    <div class="frequently-bought-together-product">
+                      <label for="{{ related_product.handle }}">
+                        {% assign default_variant = related_product.selected_or_first_available_variant %}
+                        {% if default_variant.available %}
+                          <input
+                            type="checkbox"
+                            id="{{ related_product.handle }}"
+                            name="id[]"
+                            value="{{ default_variant.id }}"
+                            data-variant-id="{{ default_variant.id }}"
+                            checked
+                          >
+                        {% endif %}
+                        <div class="product-image-container">
+                          {% if related_product.has_only_default_variant %}
+                            <img
+                              class="product-image"
+                              src="{{ related_product.images[0] | image_url: width: 150 }}"
+                              alt="{{ related_product.featured_media.alt }}"
+                              width="150"
+                              height="150"
+                            >
+                          {% else %}
+                            <img
+                              class="product-image"
+                              src="{{ default_variant.featured_image | image_url: width: 150 }}"
+                              alt="{{ default_variant.featured_image.alt }}"
+                              width="150"
+                              height="150"
+                            >
+                          {% endif %}
+                        </div>
+                        <div class="product-info">
+                          <p>
+                            <a href="{{ related_product.url }}" class="product-title" target="_blank">
+                              {{- related_product.title | truncate: 50 -}}
+                            </a>
+                          </p>
+                          {% assign compareAtPrice = default_variant.compare_at_price %}
+                          <div>
+                            <span class="h3 product-price"
+                              ><b>{{ default_variant.price | money }}</b></span
+                            >
+                            <span class="compare-at-price">{{ compareAtPrice | money }}</span>
+                          </div>
+                          {% if related_product.variants.size > 1 %}
+                            <select
+                              id="product-select-{{ related_product.id }}"
+                              name="related-id[{{ related_product.id }}]"
+                              class="product-variant-select"
+                            >
+                              {% for variant in related_product.variants %}
+                                {% if variant.available %}
+                                  <option
+                                    data-price="{{ variant.price | money }}"
+                                    data-compare-at-price="{{ variant.compare_at_price | money }}"
+                                    data-image="{{ variant.image | image_url: width: 150 }}"
+                                    data-sku="{{ variant.sku }}"
+                                    value="{{ variant.id }}"
+                                  >
+                                    {{ variant.title }}
+                                  </option>
+                                {% endif %}
+                              {% endfor %}
+                            </select>
+                          {% endif %}
+                        </div>
+                      </label>
+                      <input
+                        id="fbtproperties"
+                        type="text"
+                        name="properties[_fbt]"
+                        value="{{ product.selected_or_first_available_variant.sku }}"
+                        style="display:none;"
+                      >
+                    </div>
+                  {% endunless %}
+                {% endif %}
+              {% endfor %}
+            {% endpaginate %}
+            {% if count == 3 %}
+              {% break %}
+            {% endif %}
+          {% endfor %}
+          <div class="frequently-bought-together-total">
+            <span>Total price:</span><br>
+            <span class="total-price"></span> <span class="total-compare-at-price"></span><br>
+            <span class="total-savings"></span><br>
+            <button type="submit" name="add" id="AddToCartFBT" class="btn-fbt btn btn-mini text-center">
+              Add Selected to Cart
+            </button>
+            <p style="font-size:11px; line-height: 1.3; margin-top: 5px;">
+              <a href="/pages/bundle-builder" target="_blank"
+                >For more customization <br>
+                options check out our <br>
+                new Bundle Builder!</a
+              >
+            </p>
+          </div>
+        </div>
+      </form>
+    </div>
+    <script async src="FBT.js"></script>
+  {% endif %}
+{% endif %}
